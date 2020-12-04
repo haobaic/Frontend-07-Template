@@ -66,8 +66,9 @@
 		return document.querySelector(element)
 	};
 	let color = 1; // 现在该谁下了, 1 或者 2
+	onShow();
 	//初始化
-	function show() {
+	function onShow() {
 		$("#main").innerHTML = "";
 		for (let i = 0; i < 3; i++) {
 			for (let j = 0; j < 3; j++) {
@@ -77,53 +78,64 @@
 					pattern[i * 3 + j] == 2 ? "❌" :
 					pattern[i * 3 + j] == 1 ? "⭕" : "";
 				cell.addEventListener("click", () => userMove(j, i))
-				$("#main").appendChild(cell)
-			}
-			$("#main").appendChild(document.createElement("br"));
+				$("#main").appendChild(cell);
+			};
+			$("#main").appendChild(document.createElement("br"))
 		}
 	};
 	//点击事件
 	function userMove(x, y) {
 		pattern[y * 3 + x] = color;
-		if (check(pattern, color)) {
-			removeClick(color);
-		}
-		color = 3 - color; // 谁走下一步
-		show();
+		color = 3 - color; //下一步谁下
+		onShow();
 		computerMove()
 	};
-	//机器人下棋
+	/*
+	 * AI对战
+	 * */
 	function computerMove() {
 		let {
 			point,
 			result
 		} = baseChioce(pattern, color);
-		if (point)
+		if (point){
 			pattern[point[1] * 3 + point[0]] = color;
-		if (check(pattern, color)) {
-			removeClick(color, result);
-		};
-		if(typeof result==="boolean"){
-			removeClick(color, result);
 		}
+		removeClick(color, result)
 		color = 3 - color;
-		show();
+		onShow();
 	};
-	/**
-	 * 禁止点击事件
-	 * @color {Number} 当前谁下棋
-	 * @result {Boolean} 当前状态
+	/*
+	 * 判断是否完成对局 完成不让点击
+	 * @color {Number} 谁在下棋
+	 * @state {Boolean} 当前状态
 	 */
-	function removeClick(color, result) {
-		$(".box>h1").innerText =
-			result == false ? "❌与⭕平局" :
-			color == 2 ? "❌赢了⭕" : "⭕赢了❌";
-		$("#main").classList.add("disabled");
+	function removeClick(color, state) {
+		//验证输赢
+		if (check(pattern, color)) {
+			titleRender(color, state);
+		};
+		//验证是否平局
+		if (typeof state === "boolean") {
+			titleRender(color, state);
+		}
 	};
-	/**
-	 * 验证谁会赢
-	 * @pattern {Array} 当前的数组
-	 * @color {Number} 下一步谁下
+	/*
+	 * 标题更改 重新渲染
+	 *  @color {Number} 谁在下棋
+	 * @state {Boolean} 当前状态
+	 */
+	function titleRender(color, state) {
+		$("#main").classList.add("disabled");
+		$(".box>h1").innerText =
+			state == false ? "❌与⭕平局" :
+			color == 2 ? "❌赢了⭕" : "⭕赢了❌";
+	};
+	/*
+	 * 验证输赢
+	 * @pattern {Array} 当前数组
+	 * @color {Number} 谁在下棋
+	 * return Bollean
 	 */
 	function check(pattern, color) {
 		//横行
@@ -132,7 +144,7 @@
 			for (let j = 0; j < 3; j++) {
 				if (pattern[i * 3 + j] !== color) flag = false;
 			}
-			if (flag) return true;
+			if (flag) return true
 		};
 		//竖行
 		for (let i = 0; i < 3; i++) {
@@ -140,7 +152,7 @@
 			for (let j = 0; j < 3; j++) {
 				if (pattern[j * 3 + i] !== color) flag = false;
 			}
-			if (flag) return true;
+			if (flag) return true
 		};
 		//右斜行
 		{
@@ -148,52 +160,59 @@
 			for (let j = 0; j < 3; j++) {
 				if (pattern[j * 3 + 2 - j] !== color) flag = false;
 			}
-			if (flag) return true;
-		}
+			if (flag) return true
+		};
 		//左斜行
 		{
 			let flag = true;
 			for (let j = 0; j < 3; j++) {
 				if (pattern[j * 3 + j] !== color) flag = false;
 			}
-			if (flag) return true;
-		}
+			if (flag) return true
+		};
 	};
 	/*
-	*	克隆函数
-	* 	@pattern {Array} 数组
-	*/
+	 *  克隆函数
+	 * @pattern {Array} 当前数组
+	 * return {}
+	 */
 	function clone(pattern) {
 		return Object.create(pattern);
-	};
+	}
 	/*
-	*	判断谁会赢
-	* @pattern {Array} 当前的数组
-	* @color {Number} 下一步谁下
-	*/
+	 * 预测输赢
+	 * @pattern {Array} 当前数组
+	 * @color {Number} 谁在下棋
+	 * return {}
+	 */
 	function isWill(pattern, color) {
 		for (let i = 0; i < 3; i++) {
 			for (let j = 0; j < 3; j++) {
 				if (pattern[i * 3 + j]) continue;
 				let temp = clone(pattern);
 				temp[i * 3 + j] = color;
-				if (check(temp, color)) return [j, i];
+				if (check(temp, color)) {
+					return [j, i]
+				}
 			}
-		};
+		}
 		return null;
 	};
 	/*
-	*	AI判断输赢
-	* @pattern {Array} 当前的数组
-	* @color {Number} 下一步谁下
-	*/
+	 * 找到最有利的位置和即将的结果
+	 * @pattern {Array} 当前数组
+	 * @color {Number} 谁在下棋
+	 * return {}
+	 */
 	function baseChioce(pattern, color) {
 		let p;
-		if (p = isWill(pattern, color)) return {
-			point: p,
-			result: 1
+		if (p = isWill(pattern, color)) {
+			return {
+				point: p,
+				result: 1
+			}
 		};
-		let bestResult = {
+		let baseResult = {
 			point: null,
 			result: -2
 		};
@@ -205,19 +224,18 @@
 				let {
 					result: opp
 				} = baseChioce(temp, 3 - color);
-				if (-opp > bestResult.result) {
-					bestResult = {
-						result: -opp,
-						point: [j, i]
-					}
+				if (-opp > baseResult.result) {
+					baseResult = {
+						point: [j, i],
+						result: -opp
+					};
 				}
-				if (bestResult.result == 1) //当为1的时候代表赢了 
+				if (baseResult.result == 1) //表示已经能赢了 
 					break outer;
 			}
-		};
-		// 如果if执行了,说明是平局
-		if (bestResult.result === -2) bestResult.result = false
-		return bestResult
+		}
+		// 表示是平局
+		if (baseResult.result == -2) baseResult.result = false;
+		return baseResult;
 	};
-	show();
 </script>
