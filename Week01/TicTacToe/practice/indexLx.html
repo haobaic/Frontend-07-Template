@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		.cell{
+			width: 100px;
+			height: 100px;
+			background-color: aquamarine;
+			display: inline-block;
+			border: 1px solid #fff;
+			vertical-align: middle;
+			line-height: 100px;
+			font-size: 50px;
+			text-align: center;
+			cursor: pointer;
+			color: #fff;
+		}
+	</style>
+	<body>
+		<div id="main"></div>
+	</body>
+</html>
+<script type="text/javascript">
+	let arr=[
+		[0,0,0],
+		[0,0,0],
+		[0,0,0]
+	];
+	//选中状态
+	let color=1;
+	//初始化
+	function show(){
+		let main=document.querySelector("#main");
+		main.innerHTML="";
+		for (let i = 0; i < 3; i++) {
+			for (let j = 0; j < 3; j++) {
+				let cell=document.createElement("div");
+				cell.classList.add("cell");
+				cell.innerText=
+				    arr[i][j]==2?"❌":
+					arr[i][j]==1?"⭕":"";
+					cell.addEventListener("click",()=>move(j,i));
+				main.appendChild(cell)
+			};
+			main.appendChild(document.createElement("br"))
+		}
+	};
+	//点击事件
+	function move(x,y){
+		arr[y][x]=color;
+		if(check(arr,color)){
+			console.warn(color==2?"❌赢了":"⭕赢了");
+		}
+		color=3-color;
+		show();
+		if(isWill(arr,color)){
+			console.warn(color==2?"❌要赢了":"⭕要赢了");
+		}
+	};
+	//验证谁赢了
+	function check(arr,color){
+		//横行
+		for (let i = 0; i < 3; i++) {
+			let flag=true;
+			for (let j = 0; j < 3; j++) {
+				if(arr[i][j]!==color) flag=false
+			}
+			if(flag) return true;
+		};
+		//竖行
+		for (let i = 0; i < 3; i++) {
+			let flag=true;
+			for (let j = 0; j < 3; j++) {
+				if(arr[j][i]!==color) flag=false
+			}
+			if(flag) return true;
+		};
+		//右斜行
+		{
+			let flag=true;
+			for (let i = 0; i < 3; i++) {
+				if(arr[i][2-i]!==color) flag=false
+			}
+			if(flag) return true;
+		};
+		//左斜行
+		{
+			let flag=true;
+			for (let i = 0; i < 3; i++) {
+				if(arr[i][i]!==color) flag=false
+			}
+			if(flag) return true;
+		}
+	};
+	//克隆
+	function clone(arr){
+		return JSON.parse(JSON.stringify(arr));
+	};
+	//验证谁要赢了
+	function isWill(arr,color){
+		for (let i = 0; i < 3; i++) {
+			for (let j = 0; j < 3; j++) {
+				if(arr[i][j]) continue;
+				let tmp=clone(arr);
+				tmp[i][j]=color;
+				if(check(tmp,color)) return true;
+			}
+		}
+		return false
+	}
+	show();
+</script>

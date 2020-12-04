@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='utf-8'>
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+		<title>三子棋游戏</title>
+		<meta name='viewport' content='width=device-width, initial-scale=1'>
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			.cell{
+				width: 100px;
+				height: 100px;
+				background-color: aquamarine;
+				display: inline-block;
+				border: 1px solid #fff;
+				vertical-align: middle;
+				line-height: 100px;
+				font-size: 50px;
+				text-align: center;
+				cursor: pointer;
+				color: #fff;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="main"></div>
+	</body>
+</html>
+<script>
+	// 定义初使数组
+	let pattern = [
+		[0, 2,0],
+		[0, 1, 0],
+		[0, 0, 0],
+	];
+	
+	let color=1;
+	function show() {
+		let board = document.getElementById("main");
+		board.innerHTML="";
+		for (let i = 0; i < 3; i++) {
+			for (let j = 0; j < 3; j++) {
+				let cell = document.createElement("div");
+				cell.classList.add("cell");
+				cell.innerText =
+					pattern[i][j] == 2 ? "❌" :
+					pattern[i][j] == 1 ? "⭕" : "";
+				cell.addEventListener("click",()=>move(j,i));
+				board.appendChild(cell);
+			}
+			board.appendChild(document.createElement("br"));
+		}
+	};
+	// 点击事件
+	function move(x,y){
+		pattern[y][x]=color;
+		if(check(pattern,color)){
+			console.warn(color==2?"X 赢了":"O 赢了")
+		}
+		color=3-color;
+		show(pattern);
+		if(willWin(pattern,color)){
+			console.warn(color==2?"X 要赢了":"O 要赢了")
+		};
+		console.log(baseChoice(pattern,color))
+	};
+	//判断输赢
+	function check(pattern,color){
+		for(let i=0;i<3;i++){ //检查3个横行
+			let flag=true;
+			for(let j=0;j<3;j++){
+				if(pattern[i][j]!==color){
+					flag=false
+				}
+			}
+			if(flag) return true;
+		};
+		for(let i=0;i<3;i++){ //检查3个竖行
+			let flag=true;
+			for(let j=0;j<3;j++){
+				if(pattern[j][i]!==color){
+					flag=false;
+				}
+			}
+			if(flag) return true;
+		};
+		{//右斜行
+			let flag=true;
+			for(let i=0;i<3;i++){
+				if(pattern[i][2-i]!==color){
+					flag=false;
+				}
+			};
+			if(flag) return true;
+		}
+		{ //左斜行
+			let flag=true;
+			for(let i=0;i<3;i++){
+				if(pattern[i][i]!==color){
+					flag=false;
+				}
+			};
+			if(flag) return true;
+		}
+	};
+	//克隆函数
+	function clone(pattern){
+		return JSON.parse(JSON.stringify(pattern));
+	};
+	//提前判断输赢
+	function willWin(pattern,color){
+		for(let i=0;i<3;i++){
+			for(let j=0;j<3;j++){
+				if(pattern[i][j]) continue;
+				let tmp=clone(pattern);
+				tmp[i][j]=color;
+				if(check(tmp,color)){
+					return [j,i];
+				}
+			}
+		}
+		return null;
+	};
+	//预测谁赢的机会大
+	function baseChoice(pattern,color){
+		let p;
+		if(p=willWin(pattern,color)){
+			return{
+				point:p,
+				result:1
+			}
+		}
+		let result=-2;
+		let point=null;
+		for (let i = 0; i < 3; i++) {
+			for (let j= 0; j <3; j++) {
+				if(pattern[i][j]) continue;
+				let tmp=clone(pattern);
+				tmp[i][j]=color;
+				let r=baseChoice(tmp,3-color).result;
+				if(-r>result) {
+					result=-r;
+					point=[j,i];
+				};
+			}
+		};
+		return{
+			point:point,
+			result:point?result:0
+		}
+	}
+	show(pattern);
+	console.log(baseChoice(pattern,color))
+</script>
