@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>红绿灯</title>
+	</head>
+	<style>
+		.box{
+			width: 300px;
+			height: auto;
+			padding: 20px 40px;
+			border-radius: 60px;
+			display: flex;
+			justify-content:space-around;
+			align-items: center;
+			background-color: #000;
+		}
+		.box>div{
+			width: 80px;
+			height: 80px;
+			border-radius: 50%;
+			background-color: aliceblue;
+		}
+		.next{
+			width: 80px;
+			height: 50px;
+			line-height: 50px;
+			background-color: aquamarine;
+			outline: none;
+			cursor: pointer;
+			margin: 10px;
+		}
+	</style>
+	<body>
+		<h2>第一种setTimeout</h2>
+		<div class="box timeBox">
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+		<h2>第二种promise</h2>
+		<div class="box promiseBox">
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+		<h2>第三种async自动播放</h2>
+		<div class="box autoBox">
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+		<h2>第三种async手动控制</h2>
+		<div class="box manualBox">
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+		<button class="next">手动控制</button>
+	</body>
+</html>
+<script type="text/javascript">
+	callbackStart();
+	promiseStart();
+	asyncInit();
+	go();
+	//设置颜色
+	function setTheColor(item, color, idx) {
+		for (let i = 0; i < item.length; i++) {
+			item[i].style.backgroundColor = "aliceblue";
+		}
+		item[idx].style.backgroundColor = color;
+	}
+	//设置时间
+	function sleep(element,color, idx) {
+		return new Promise((resolve, rej) => {
+			let timer = idx == 1 ? "700" : "3000";
+			setTheColor(element, color, idx)
+			time = setTimeout(resolve, timer)
+		})
+	};
+	//手动控制
+	function happen(element, color, idx) {
+		return new Promise((resolve, rej) => {
+			setTheColor(document.querySelectorAll(".manualBox>div"), color, idx)
+			element.addEventListener("click", resolve, {
+				once: true
+			});
+		})
+	};
+	// 第一种实现方式 callback
+	function callbackStart() {
+		let element = document.querySelectorAll(".timeBox>div")
+		setTheColor(element, "red", 0)
+		setTimeout(() => {
+			setTheColor(element, "yellow", 1)
+			setTimeout(() => {
+				setTheColor(element, "green", 2)
+				setTimeout(() => {
+					callbackStart()
+				}, 1000 * 1);
+			}, 1000 * 2);
+		}, 1000 * 3);
+	}
+	// 第二种实现方式 Promise
+	function promiseStart() {
+		let colors = ["red", "yellow", "green"];
+		let element=document.querySelectorAll(".promiseBox>div");
+		sleep(element,"red",0).then(()=>{
+			return sleep(element,"yellow",1).then(()=>{
+				return sleep(element,"green",2).then(()=>promiseStart())
+			})
+		})
+	}
+
+	//第三种 async/await
+	async function asyncInit() {
+		let colors = ["red", "yellow", "green"];
+		let element=document.querySelectorAll(".autoBox>div");
+		for (let i = 0; i < colors.length; i++) {
+			await sleep(element,colors[i], i)
+		};
+		await asyncInit()
+	};
+	async function go() {
+		//手动点击
+		while (true) {
+			await happen(document.querySelector(".next"), "red", 0)
+			await happen(document.querySelector(".next"), "yellow", 1)
+			await happen(document.querySelector(".next"), "green", 2)
+		}
+	};
+</script>
