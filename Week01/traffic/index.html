@@ -72,7 +72,7 @@
 		item[idx].style.backgroundColor = color;
 	}
 	//设置时间
-	function sleep(element,color, idx) {
+	function sleep(element, color, idx) {
 		return new Promise((resolve, rej) => {
 			let timer = idx == 1 ? "700" : "3000";
 			setTheColor(element, color, idx)
@@ -105,10 +105,10 @@
 	// 第二种实现方式 Promise
 	function promiseStart() {
 		let colors = ["red", "yellow", "green"];
-		let element=document.querySelectorAll(".promiseBox>div");
-		sleep(element,"red",0).then(()=>{
-			return sleep(element,"yellow",1).then(()=>{
-				return sleep(element,"green",2).then(()=>promiseStart())
+		let element = document.querySelectorAll(".promiseBox>div");
+		sleep(element, "red", 0).then(() => {
+			return sleep(element, "yellow", 1).then(() => {
+				return sleep(element, "green", 2).then(() => promiseStart())
 			})
 		})
 	}
@@ -116,9 +116,9 @@
 	//第三种 async/await
 	async function asyncInit() {
 		let colors = ["red", "yellow", "green"];
-		let element=document.querySelectorAll(".autoBox>div");
+		let element = document.querySelectorAll(".autoBox>div");
 		for (let i = 0; i < colors.length; i++) {
-			await sleep(element,colors[i], i)
+			await sleep(element, colors[i], i)
 		};
 		await asyncInit()
 	};
