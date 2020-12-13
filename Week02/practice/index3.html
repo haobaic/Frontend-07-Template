@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0;
+		}
+
+		.cell {
+			display: inline-block;
+			width: 6px;
+			height: 6px;
+			line-height: 7px;
+			background-color: gray;
+			border-bottom: 1px solid white;
+			border-right: 1px solid white;
+			vertical-align: top;
+		}
+
+		#container {
+			width: 701px;
+			line-height: 0;
+			/* font-size:0; */
+		}
+		.save{
+			width: 100px;
+			height: 40px;
+			border: none;
+			background:palevioletred;
+			color: #fff;
+			font-size: 18px;
+			margin: 20px;
+			cursor: pointer;
+		}
+
+	</style>
+	<body>
+		<div id="container"></div>
+		<button class="save">保存</button>
+	</body>
+</html>
+<script src="../js/comm.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	/*
+	 *ES6为Array增加了fill()函数，使用制定的元素填充数组，其实就是用默认内容初始化数组。
+	 *该函数有三个参数。
+	 *arr.fill(value, start, end)
+	 *@value：填充值。
+	 *@start：填充起始位置，可以省略。
+	 *@end：填充结束位置，可以省略，实际结束位置是end-1。
+	 */
+	let map = localStorage["map"] ? JSON.parse(localStorage["map"]) : Array(10000).fill(0);
+	let mousedown = false; //是否在鼠标移动的同时点击了鼠标左键
+	let clear = false; //鼠标右键时候是否清除地图
+	let container = document.querySelector("#container");
+	//初始化
+	(function() {
+		
+		for (let y = 0; y < 100; y++) {
+			for (let x = 0; x < 100; x++) {
+				let cell = document.createElement("div");
+				cell.classList.add("cell");
+				/*
+				 *判断是否有地图
+				 * 1 有地图
+				 * 0 没地图
+				 */
+				if (map[100 * y + x] == 1)
+					cell.style.backgroundColor = "greenyellow";
+				//鼠标移动事件
+				cell.addEventListener("mousemove", () => {
+					if (mousedown) { 
+						if (clear) {
+							cell.style.backgroundColor = "";
+							map[100 * y + x] = 0;
+						} else {
+							cell.style.backgroundColor = "greenyellow";
+							map[100 * y + x] = 1;
+						}
+					}
+				})
+				container.appendChild(cell);
+			}
+		};
+	}());
+	// 当按下鼠标按钮时运行
+	document.addEventListener("mousedown", e => {
+		mousedown = true;
+		clear = (e.which === 3)
+	});
+	//当松开鼠标按钮时运行
+	document.addEventListener("mouseup", () => mousedown = false);
+	//禁止鼠标右键菜单
+	document.addEventListener("contextmenu", e => e.preventDefault());
+
+    //保存地图数组
+	document.querySelector(".save").addEventListener("click",()=>localStorage['map']=JSON.stringify(map))
+	//广度优先算法
+	async function path(map, start, end) {
+		let queue=[start];
+		async function insert(x,y){ //入队逻辑
+			if(x<0||x>=100||y<0||y>=100) return; //遇到边什么也不做
+			if(map[y*100+x]) return;
+			await sleep(10);
+			container.children[y*100+x].style.backgroundColor="red"
+			map[y*100+x]=2;  //找过的点给一个标记2
+			queue.push([x,y]);
+		};
+		while(queue.length){
+			let [x,y]=queue.shift();
+			// console.log(x,y);
+			if(x===end[0]&&y===end[1]){ //找到最终节点
+				return true;
+			};
+			await insert(x-1,y);
+			await insert(x,y-1);
+			await insert(x+1,y);
+			await insert(x,y+1);
+		};
+		return false;
+	}
+	console.log(path(map,[0,0],[50,50]))
+</script>
