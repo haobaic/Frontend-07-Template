@@ -28,11 +28,11 @@ lastIndex 属性用于规定下次匹配的起始位置。
 >迭代器 generator
 
 
-[](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Generator)
+[链接](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Generator)
 
 
 >yield
 
 之前没用过 第一次见到 学习中
 
-[](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/yield)
+[链接](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/yield)
