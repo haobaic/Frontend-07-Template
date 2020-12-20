@@ -1,13 +1,10 @@
-```
-AST抽象语法树 LL left left算法
-
-```	
-
 
 > 什么是四则运算
 ```
- TokenNumber： 0-9
- Operator: + - * / 
+ TokenNumber： 0-9的组合
+ Operator: + - * / 之一
+ Whitespace:<SP>
+ LineTerminator:<LF><CR>
 ```	
 	
 >正则表达式
