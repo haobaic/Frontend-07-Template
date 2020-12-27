@@ -1,3 +1,8 @@
+```
+AST抽象语法树 LL left left算法
+
+```	
+
 
 > 什么是四则运算
 ```
@@ -7,6 +12,23 @@
  LineTerminator:<LF><CR>
 ```	
 	
+# 词法解析
+```
+正则匹配：利用正则匹配切分string，获得不同类型的单词。
+类型定义：定义单词类别，与正则匹配识别的单词一一对应。类型分为：数字|空格|行结束符|*|/|+|- 七种。
+词法解析：按正则匹配划分单词，并标注类型。
+标注结束：利用EOF作为结束符标注句子结束，词法解析完成。
+```
+# 语法分析
+```
+定义：运算由 加法 AdditiveExpression 和 乘法 MultiplicativeExpression 组成
+规则：AdditiveExpression := Number | MultiplicativeExpression * Number | MultiplicativeExpression / Number | AdditiveExpression + MultiplicativeExpression | AdditiveExpression - MultiplicativeExpression
+
+MultiplicativeExpression := Number | MultiplicativeExpression * Number | MultiplicativeExpression / Number
+
+语法分析：得到语法分析树，并将根结点标注为Expression。
+注意：把单个数字，当成一个 MultiplicativeExpression 运算。
+```
 >正则表达式
 
 RegExp.exec() 方法用于检索字符串中的正则表达式的匹配。
