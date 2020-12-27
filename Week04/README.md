@@ -17,7 +17,6 @@
 #LL LR
 字符串多层级结构分析
 
-
 >romCharCode() 可接受一个指定的 Unicode 值，然后返回一个字符串。
 
 注意：该方法是 String 的静态方法，字符串中的每个字符都由单独的 Unicode 数字编码指定。使用语法： String.fromCharCode()。
