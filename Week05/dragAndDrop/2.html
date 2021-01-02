@@ -1,0 +1,58 @@
+<style type="text/css">
+	* {
+		margin: 0;
+		padding: 0;
+	}
+</style>
+<div id="container">当脾气来的时候，福气就走了。人的优雅关键在于控制自己的情绪。用嘴伤人是最愚蠢的一种行为。一个能控制住不良情绪的人，比一个能拿下一座城池的人更强大。水深则流缓，语迟则人贵。我们花了两年的时间学说话，却要花数十年的时间学会闭嘴。说，是一种能力。不说，是一种智慧。真正的强者，不是没有眼泪的人，而是含着眼泪奔跑的人。生活有进有退，输什么也不能输了心情。人的平庸，多数不是因为自身能力不够，而是因为安于现状，没有激发自己的潜能，在平淡机械的生活中埋没了自己。别总因为迁就别人就委屈自己，这个世界没几个人值得你总弯腰。弯腰的时间久了，只会让人习惯于你的低姿态，你会越来越不重要。世上除了生死，都是小事。从今天开始，每天微笑吧。不管遇到了什么烦心事，都不要自己为难自己；无论今天发生多么糟糕的事，都不应该感到悲伤。今天是你往后日子里最年轻的一天了，因为有明天，今天永远只是起跑线。记住一句话：越努力，越幸运……</div>
+<div id="dragable" style="width: 150px;height: 150px;background-color: antiquewhite;display: inline-block;"></div>
+<script type="text/javascript">
+	let dragable = document.getElementById("dragable");
+	let baseX = 0,
+		baseY = 0;
+	dragable.addEventListener("mousedown", function(event) {
+		// console.log(event)
+		let startX = event.clientX,
+			startY = event.clientY;
+		let up = event => { //	清除事件
+			baseX = baseX + event.clientX - startX;
+			baseY = baseY + event.clientY - startY
+			document.removeEventListener("mousemove", move);
+			document.removeEventListener("mouseup", up);
+		};
+		let move = event => {
+			let range=getNearest(event.clientX,event.clientY);
+			range.insertNode(dragable);
+			// dragable.style.transform = `translate(${baseX+event.clientX-startX}px,${baseY+event.clientY-startY}px)`
+		};
+		document.addEventListener("mousemove", move);
+		document.addEventListener("mouseup", up)
+	});
+	let ranges=[];
+	let container=document.getElementById("container");
+	for (let i = 0; i < container.childNodes[0].textContent.length; i++) {
+		let range=document.createRange();
+		range.setStart(container.childNodes[0],i);
+		range.setEnd(container.childNodes[0],i);
+		ranges.push(range);
+		// console.log(range.getBoundingClientRect())
+	};
+	function getNearest(x,y){
+		let min=Infinity;
+		let neareest=null;
+		
+		for (let range of ranges) {
+			let rect=range.getBoundingClientRect();
+			let distance=(rect.x-x)**2+(rect.y-y)**2;
+			if(distance<min){
+				neareest=range;
+				min=distance;
+			}
+		}
+		return neareest;
+	}
+	//禁止选中
+	document.addEventListener("selectstart",(e)=>e.preventDefault())
+	
+	
+</script>

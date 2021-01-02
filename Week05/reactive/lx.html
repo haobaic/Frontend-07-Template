@@ -1,0 +1,43 @@
+<script type="text/javascript">
+	let object = {
+		a: 1,
+		b: 1,
+		d: 1
+	};
+	let callbacks = [];
+	let po = reactive(object);
+
+	// debugger;
+	delete po.d;
+	console.log(po)
+	effect(() => {
+		console.log(po)
+	})
+
+	function effect(callback) {
+		callbacks.push(callback)
+	}
+
+	function reactive(object) {
+		return new Proxy(object, {
+			set(obj, prop, val) {
+				for (let callback of callbacks) {
+					callback()
+				}
+				obj[prop] = val;
+				return obj[prop];
+			},
+			get(obj, prop) {
+				return obj[prop];
+			},
+			deleteProperty(obj, prop) {
+				console.log(obj, prop)
+				if (prop === 'd') { //拦截删除
+					return delete obj[prop]
+				} else {
+					return obj[prop]
+				}
+			}
+		})
+	}
+</script>

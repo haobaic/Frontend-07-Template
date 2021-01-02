@@ -1,0 +1,28 @@
+<style type="text/css">
+	* {
+		margin: 0;
+		padding: 0;
+	}
+</style>
+<div id="dragable" style="width: 150px;height: 150px;background-color: antiquewhite"></div>
+<script type="text/javascript">
+	let dragable = document.getElementById("dragable");
+	let baseX = 0,
+		baseY = 0;
+	dragable.addEventListener("mousedown", function(event) {
+		// console.log(event)
+		let startX = event.clientX,
+			startY = event.clientY;
+		let up = event => { //	清除事件
+			baseX = baseX + event.clientX - startX;
+			baseY = baseY + event.clientY - startY
+			document.removeEventListener("mousemove", move);
+			document.removeEventListener("mouseup", up);
+		};
+		let move = event => {
+			dragable.style.transform = `translate(${baseX+event.clientX-startX}px,${baseY+event.clientY-startY}px)`
+		};
+		document.addEventListener("mousemove", move);
+		document.addEventListener("mouseup", up)
+	})
+</script>
