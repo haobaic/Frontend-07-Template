@@ -55,7 +55,7 @@ MultiplicativeExpression := Number | MultiplicativeExpression * Number | Multipl
 # 正则
  * 字符串通用模式匹配
 
-#状态机
+# 状态机
  * 通用的字符串分析
 
 # LL LR
