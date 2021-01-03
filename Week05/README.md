@@ -11,6 +11,11 @@
  * range - html中的区域，创建range，插入节点
  * 去除选中事件冒泡 - selectstart
 
+>CSSOM
+range.getBoundingClientRect()
+range.insertNode()
+
+
 ## AST抽象语法树 LL left left算法
 
 > 四则运算
