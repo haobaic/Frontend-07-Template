@@ -1,0 +1,27 @@
+<script type="text/javascript">
+	class Dog {
+		constructor() {
+			this.bite = 20;
+		}
+
+		attack() {
+			return this.bite;
+		}
+	}
+
+	class Human {
+		constructor() {
+			this.levelHealth = 100;
+		}
+
+		hurt(damage) {
+			this.levelHealth -= damage;
+			return this.levelHealth
+		}
+	}
+
+
+	let dog = new Dog();
+	let human = new Human();
+	human.hurt(dog.attack())
+</script>
