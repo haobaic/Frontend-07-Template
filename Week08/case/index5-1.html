@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+</html>
+<script type="text/javascript">
+	
+		//方法一 
+		let flagC=false;
+		function match(str) {
+			let state = start;
+			for (let c of str) {
+				state = state(c)
+			}
+			return state === end;
+		};
+	
+		function start(c) {
+			if (c === 'a')
+				return foundA;
+			else
+				return start;
+		};
+	
+		function foundA(c) {
+			if (c === 'b')
+				return foundB;
+			else
+				return start(c);
+		};
+	
+		function foundB(c) {
+			if (c === 'c'){
+				flagC=true;
+			}else if (flagC&&c === 'x'){
+				return end;
+			};
+			return start(c);
+		};
+		function end(c) {
+			return end;
+		};
+		console.log(match('12244abcabx'));
+		
+	//方法二
+	// function match(str) {
+	// 	let state = start;
+	// 	for (let c of str) {
+	// 		state = state(c)
+	// 	}
+	// 	return state === end;
+	// };
+
+	// function start(c) {
+	// 	if (c === 'a')
+	// 		return foundA;
+	// 	else
+	// 		return start;
+	// };
+
+	// function foundA(c) {
+	// 	if (c === 'b')
+	// 		return foundB;
+	// 	else
+	// 		return start(c);
+	// };
+
+	// function foundB(c) {
+	// 	if (c === 'c')
+	// 		return foundC;
+	// 	else
+	// 		return start(c);
+	// };
+
+	// function foundC(c) {
+	// 	if (c === 'a')
+	// 		return foundA2;
+	// 	else
+	// 		return start(c);
+	// };
+
+	// function foundA2(c) {
+	// 	if (c === 'b')
+	// 		return foundB2;
+	// 	else
+	// 		return start(c);
+	// };
+
+	// function foundB2(c) {
+	// 	if (c === 'x')
+	// 		return end;
+	// 	else
+	// 		return foundB(c);
+	// };
+
+	// function end(c) {
+	// 	return end;
+	// };
+	// console.log(match('12344abcabx'));
+</script>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+</html>
+<script type="text/javascript">
+	let str="abcdefg";
+	//方法1
+	function match(str){
+		for (let item of str) {
+			if(item==='a') return true;
+		};
+		return false;
+	};
+	console.log(match(str));
+	//方法2
+	function match2(str){
+		return str.indexOf("a")!=-1;
+	};
+	console.log(match2(str));
+	// 方法3
+	function match3(str){
+		return str.includes('a')
+	};
+	console.log(match3(str));
+</script>
