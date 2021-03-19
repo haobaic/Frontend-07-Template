@@ -1,0 +1,55 @@
+import { Component } from "./framework";
+// div
+export class Carousel extends Component {
+  constructor() {
+    super();
+    this.attributes = Object.create(null);
+  }
+  setAttribute(name, value) {
+    this.attributes[name] = value;
+  }
+  render() {
+    this.root = document.createElement("div");
+    this.root.classList.add("carousel");
+    for (const record of this.attributes.src) {
+      let child = document.createElement("div");
+      child.style.backgroundImage = `url(${record})`;
+      this.root.appendChild(child);
+    }
+    let position=0;
+    this.root.addEventListener("mousedown", (event) => {
+        let children=this.root.children;
+      let startX = event.clientX;
+      let move = (event) => {
+        let x = event.clientX-startX;
+        let current=position-Math.round((x-x%500)/500);
+        for (const offect of [-1,0,1]) {
+            let pos=current+offect;
+            pos=(pos+children.length)%children.length;
+
+            children[pos].style.transition="none";
+            children[pos].style.transform=`translateX(${-pos*500+offect*500+x%500}px)`;
+        }
+      };
+      let up = (event) => {
+        let x = event.clientX-startX;
+        position=position-Math.round(x/500);
+        for (const offect of [0,-Math.sign(Math.round(x/500)-x+250*Math.sign(x))]) {
+            let pos=position+offect;
+            pos=(pos+children.length)%children.length;
+
+            children[pos].style.transition="";
+            children[pos].style.transform=`translateX(${-pos*500+offect*500}px)`;
+        }
+        document.removeEventListener("mousemove", move);
+        document.removeEventListener("mouseup", up);
+      };
+      document.addEventListener("mousemove", move);
+      document.addEventListener("mouseup", up);
+    });
+    return this.root;
+  }
+  mountTo(parent) {
+    parent.appendChild(this.render());
+  }
+}
