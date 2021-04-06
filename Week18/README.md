@@ -2,17 +2,23 @@
 
 ## mocha 地址
 
-`https://mochajs.org/`
+```
+https://mochajs.org/
+```
 
 ## 安装
 
 ### 全局安装
 
-`npm install --global mocha`
+```
+npm install --global mocha
+```
 
 ### 作为项目的开发依赖项
 
-`npm install --save-dev mocha`
+```
+npm install --save-dev mocha
+```
 
 ### 创建 add.js
 
@@ -26,7 +32,9 @@ module.exports = add;
 
 ### 创建 test 文件夹/test.js
 
-`mkdir test/touch test.js`
+```
+mkdir test/touch test.js
+```
 
 ### test.js
 
@@ -46,7 +54,9 @@ describe("add函数测试", function () {
 
 ### 命令行运行
 
-`mocha`
+```
+mocha
+```
 
 ## export 导出
 
@@ -75,8 +85,10 @@ describe("add函数测试", function () {
 
 ### 下载依赖
 
-`npm i --save-dev @babel/core @babel/register `
-`npm i @babel/preset-env --save-dev`
+```
+npm i --save-dev @babel/core @babel/register
+npm i @babel/preset-env --save-dev
+```
 
 ### 创建.babelrc 文件配置
 
@@ -96,4 +108,12 @@ describe("add函数测试", function () {
 
 ### 运行
 
-`npm run test`
+```
+npm run test
+```
+
+### 安装 nyc
+
+```
+npm i --save-dev nyc
+```
