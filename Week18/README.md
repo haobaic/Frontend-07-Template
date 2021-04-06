@@ -117,3 +117,96 @@ npm run test
 ```
 npm i --save-dev nyc
 ```
+
+### 修改 package.json 中 scripts
+
+```
+ "scripts": {
+    "test": "mocha --require @babel/register",
+    "coverage": "nyc npm run test"
+  },
+```
+
+## 查看覆盖率
+
+```
+ npm run coverage
+```
+
+## 引入 nyc 改变 export
+
+### 修改 add.js
+
+```
+ export function add(a, b) {
+  return a + b;
+}
+export function mul(a, b) {
+  return a * b;
+}
+module.exports.add = add;
+module.exports.mul = mul;
+
+```
+
+### 修改 test.js
+
+```
+var assert = require("assert");
+import {add,mul} from "../add";
+describe("add文件测试", function () {
+  it("1+2等于3", function () {
+    assert.equal(add(1, 2), 3);
+  });
+  it("-5+2等于-3", function () {
+    assert.equal(add(-5, 2), -3);
+  });
+  it("5*2等于10", function () {
+    assert.equal(mul(5, 2), 10);
+  });
+});
+
+```
+
+## 引入依赖
+
+```
+npm install --save-dev babel-plugin-istanbul
+npm i @istanbuljs/nyc-config-babel --save-dev
+```
+
+### 修改.babelrc
+
+```
+{
+    "presets": [
+        "@babel/preset-env"
+    ],
+    "plugins": [
+        "istanbul"
+    ]
+}
+```
+
+### 创建.nycrc
+
+```
+{
+    "extends": "@istanbuljs/nyc-config-babel"
+}
+```
+
+### 修改 package.json 中 scripts
+
+```
+ "scripts": {
+    "test": "mocha --require @babel/register",
+    "coverage": "nyc mocha"
+  },
+```
+
+### 运行
+
+```
+npm run coverage
+```
