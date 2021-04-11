@@ -1,0 +1,12 @@
+{
+  "name": "publish-tool",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node ./publish.js",
+    "public":"scp -P 8022 -r ./* haob@127.0.0.1:/home/haob/publish-tool"
+  },
+  "author": "",
+  "license": "ISC"
+}
