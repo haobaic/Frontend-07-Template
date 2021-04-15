@@ -5,8 +5,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "node ./server.js",
-    "publish":"scp -P 8022 -r ./* haob@127.0.0.1:/home/haob/publish-server"
+    "publish": "scp -P 8022 -r ./* haob@127.0.0.1:/home/haob/publish-server"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "unzipper": "^0.10.11"
+  }
 }
