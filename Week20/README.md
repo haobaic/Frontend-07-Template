@@ -27,12 +27,12 @@ Github登录第三方网站的功能的开发者验证流程相对来说很简�
  [官方文档 ](https://docs.github.com/en/developers/apps/authorizing-oauth-apps)
 
 
+### 操作指令
 
-
-`git log 查看提交记录`
-`ls -a 查看隐藏git 文件夹`
-`open ./.git 打开git`
-`ls -l ./pre-commit 查看pre-commit文件权限`
-`chmod +x ./pre-commit 给文件添加权限`
-`npm eslint --init 设置config`
+```git log 查看提交记录```
+```ls -a 查看隐藏git 文件夹```
+```open ./.git 打开git```
+`ls -l ./pre-commit 查看pre-commit文件权限```
+```chmod +x ./pre-commit 给文件添加权限```
+```npm eslint --init 设置config```
 
