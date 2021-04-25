@@ -24,9 +24,7 @@ Github登录第三方网站的功能的开发者验证流程相对来说很简�
 
 创建时填写一下信息，提交后就能得到一套 clientID 和 clientSecrets。
 
-![](https://docassets.junlli.com/img/9a9862936d99d45f16a0e7770c0680de.png?x-oss-process=style/compress)
-
-后面可参照 [官方文档 ](https://docs.github.com/en/developers/apps/authorizing-oauth-apps)来继续开发，主要流程如下。
+ [官方文档 ](https://docs.github.com/en/developers/apps/authorizing-oauth-apps)
 
 
 
